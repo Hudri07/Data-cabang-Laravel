@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('provinsi');
             $table->string('kode_pos');
             $table->string('nomer_telepon');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->text('deskripsi')->nullable();
+            $table->foreign('provinsi')->references('nama_provinsi')->on('tbl_provinsi');
             $table->timestamps();
         });
     }

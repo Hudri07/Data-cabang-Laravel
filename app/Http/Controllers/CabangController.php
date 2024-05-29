@@ -3,19 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Datacabang;
+use App\Models\DataProvinsi;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CabangController extends Controller
 {
     public function index()
     {
         $dataCabangs = Datacabang::all();
-        return view('dataCabangs.index', compact('dataCabangs'));
+
+        $dataProvinsi = DataProvinsi::all();
+        return view('dataCabangs.index', compact('dataCabangs', 'dataProvinsi'));
+    }
+
+    public function provinsi(string $nama_provinsi)
+    {
+        $provinsiStrReplace = str_replace('_', ' ', $nama_provinsi);
+
+        $dataCabangs = DB::table('data_cabangs')
+            ->join('tbl_provinsi', 'data_cabangs.provinsi', '=', 'tbl_provinsi.nama_provinsi')
+            ->select('data_cabangs.kode_cabang', 'data_cabangs.nama_cabang', 'tbl_provinsi.nama_provinsi')
+            ->where('data_cabangs.provinsi', '=', $provinsiStrReplace)
+            ->get();
+
+        return view('dataCabangs.provinsi', compact('dataCabangs'));
     }
 
     /**
@@ -23,7 +41,8 @@ class CabangController extends Controller
      */
     public function create(): View
     {
-        return view('dataCabangs.create');
+        $dataProvinsi = DataProvinsi::all();
+        return view('dataCabangs.create', compact('dataProvinsi'));
     }
 
     /**
@@ -41,8 +60,8 @@ class CabangController extends Controller
             'email' => 'required',
             'deskripsi' => 'required|min:5'
         ]);
-        DataCabang::create($request->all());
 
+        DataCabang::create($request->all());
         return redirect()->route('dataCabangs.index')->with('success', 'Data Cabang Berhasil Ditambahkan');
     }
 
@@ -64,8 +83,10 @@ class CabangController extends Controller
     public function edit($dataCabang): View
     {
         $dataCabangs = DataCabang::findorfail($dataCabang);
+
+        $dataProvinsi = DataProvinsi::all();
         // 
-        return view('dataCabangs.edit', compact('dataCabangs'));
+        return view('dataCabangs.edit', compact('dataCabangs', 'dataProvinsi'));
     }
 
     /**
@@ -101,5 +122,12 @@ class CabangController extends Controller
         $dataCabangs->delete();
 
         return redirect()->route('dataCabangs.index')->with(['success' => 'Data berhasil Dihapus']);
+    }
+    public function cetak_pdf()
+    {
+        $dataCabangs = DataCabang::all();
+
+        $pdf = PDF::loadview('dataCabangs.cetak_pdf',['dataCabangs'=>$dataCabangs]);
+    	return $pdf->stream(); 
     }
 }

@@ -48,7 +48,14 @@
 
                             <div class="form-group">
                                 <label for="provinsi">Provinsi</label>
-                                <input type="text" name="provinsi" class="form-control" value="{{ old('provinsi', $dataCabangs->provinsi) }}" placeholder="Masukkan Provinsi" required>
+                                <select name="provinsi" id="nama_provinsi" class="form-control">
+                                    @foreach($dataProvinsi as $item)
+                                    <option value="{{old('nama_provinsi', $item->nama_provinsi)}}">{{ old('nama_provinsi', $item->nama_provinsi)}}</option>
+                                    @endforeach
+                                </select>
+                                @error('provinsi')
+                                <div class="text-danger">{{$message}}</div>
+                                @enderror
                             </div>
 
                             <div class="form-group">

@@ -47,9 +47,13 @@
 
                             <div class="form-group">
                                 <label for="provinsi">Provinsi</label>
-                                <input type="text" name="provinsi" class="form-control" placeholder="Masukkan Provinsi">
+                                <select name="provinsi" id="nama_provinsi" class="form-control">
+                                    @foreach($dataProvinsi as $item)
+                                    <option value="{{$item->nama_provinsi}}">{{$item->nama_provinsi}}</option>
+                                    @endforeach
+                                </select>
                                 @error('provinsi')
-                                <div class="text-danger">Provinsi Harus di isi</div>
+                                <div class="text-danger">{{$message}}</div>
                                 @enderror
                             </div>
 

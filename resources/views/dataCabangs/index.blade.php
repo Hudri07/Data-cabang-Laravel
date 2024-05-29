@@ -75,6 +75,54 @@
                     <div class="card-body">
                         <a href="{{ route('dataCabangs.create') }}" class="btn btn-md btn-success mb-3">
                             <i class="bi bi-plus-circle"> Tambah</i></a>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Cari Nama Provinsi
+                        </button>
+
+                        <a href="{{url('cetak_pdf')}}" class="btn btn-primary" target="_blank">CETAK PDF</a>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Data Provinsi</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive ">
+                                            <table id="example" class="table table-striped" style="width:100%">
+                                                <thead class="table-warning">
+                                                    <tr>
+                                                        <th>Kode Provinsi</th>
+                                                        <th>Nama Provinsi</th>
+                                                        <th>AKSI</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($dataProvinsi as $item)
+                                                    <tr class="text-center">
+                                                        <td>{{ $item->kode_provinsi}}</td>
+                                                        <td>{{ $item->nama_provinsi }}</td>
+                                                        <td class="text-center">
+                                                        <a href="{{ route('nama_provinsi', str_replace(' ', '_', strtolower($item->nama_provinsi))) }}"
+                                            class="btn btn-primary m-2"> <i class="bi bi-search"></i> Cari</a>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         @if ($successMessage = Session::get('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{$successMessage}}

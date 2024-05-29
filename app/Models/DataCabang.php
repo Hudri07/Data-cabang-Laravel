@@ -10,7 +10,6 @@ class DataCabang extends Model
     use HasFactory;
 
     protected $primaryKey = 'kode_cabang';
-    
 
     protected $fillable = [
         'nama_cabang',

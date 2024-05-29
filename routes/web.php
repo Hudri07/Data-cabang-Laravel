@@ -44,3 +44,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
 Route::post('/register_action', [RegisterController::class, 'actionregister']);
+
+Route::get('/nama_provinsi/{nama_provinsi}', [CabangController::class, 'provinsi'])->name('nama_provinsi');
+Route::get('/cetak_pdf', [CabangController::class, 'cetak_pdf']);
+ 
